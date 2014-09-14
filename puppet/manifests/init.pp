@@ -3,7 +3,11 @@ exec { 'apt-get update':
 }
 
 file { '/var/www/':
-  ensure => 'directory',
-}
+   ensure => 'directory',
+ }
+
+file { '/home/install/':
+   ensure => 'directory',
+ }
 
 include utils, mysql, php, nginx, varnish, symbb

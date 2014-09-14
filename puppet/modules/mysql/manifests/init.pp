@@ -1,8 +1,6 @@
 class mysql {
     require utils
 
-	$root_pw = "73wozGWmO1KgCBogtr8D"
-
 	# Install the install mysql server
 	package { ['mysql-server']:
 		ensure => present,
@@ -15,13 +13,12 @@ class mysql {
 		require => Package['mysql-server'],
 	} ->
 	
-	  # We set the root password here
+    # We set the root password here
 	exec { 'set-mysql-password':
-		unless  => 'mysqladmin -uroot -proot status',
-		command => "mysqladmin -uroot password ${root_pw}",
-		path    => ['/bin', '/usr/bin'],
-		require => Service['mysql'];
-	} ->
-
-	notify {'mysql install complete! root PW is: ${root_pw}':}
+        subscribe => [ Package["mysql-server"] ],
+        refreshonly => true,
+        unless => "mysqladmin -uroot -p 73wozGWmO1KgCBogtr8D status",
+        path => "/bin:/usr/bin",
+        command => "mysqladmin -uroot password 73wozGWmO1KgCBogtr8D",
+	}
 }

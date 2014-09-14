@@ -5,6 +5,5 @@ class varnish {
 		ensure => present,
 		require => Exec['apt-get update'],
 	}
-	
-	debug("varnish install complete!")
+
 }

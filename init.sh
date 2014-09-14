@@ -19,3 +19,6 @@ apt-get update >/dev/null
 echo "Installing Puppet..."
 DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install puppet >/dev/null
 echo "Puppet installed!"
+echo "Installing SSH..."
+apt-get install openssh-server >/dev/null
+echo "SSH installed!"

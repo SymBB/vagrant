@@ -4,7 +4,7 @@ class php {
     require mysql
 
 	# Install the install varnish
-	package { ['php-pear', 'php5-dev', 'php5-mysql', 'php5-mcyrpt', 'php5-fpm', 'php5-apc', 'php5-common', 'php5-gd', 'php-auth', 'php5-imagick', 'php5-cgi', 'php5-curl', 'php5-intl', 'php5-memcached', 'php5-sqlite']:
+	package { ['php-pear', 'php5-dev', 'php5-mysql', 'php5-mcrypt', 'php5-fpm', 'php-apc', 'php5-common', 'php5-gd', 'php-auth', 'php5-imagick', 'php5-cgi', 'php5-curl', 'php5-intl', 'php5-memcached', 'php5-sqlite']:
 		ensure => present,
 		require => Exec['apt-get update'],
 	} -> # and then:
@@ -19,6 +19,5 @@ class php {
 		ensure => file,
 		require => Package['php5-fpm'],
 		  source => 'puppet:///modules/php/www.conf',
-	} ->
-	notify {'php install complete!':}
+	}
 }
