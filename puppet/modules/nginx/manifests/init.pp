@@ -82,11 +82,15 @@ class nginx {
     file { 'vagrant-nginx-initscript':
         path => '/etc/init.d/nginx',
         ensure => present,
+        replace => true,
         source => 'puppet:///modules/nginx/init.d/nginx',
     } ->
-	service { 'nginx':
-		ensure => running
-	} ->
+	file { '/etc/nginx/sites-available/':
+        ensure => directory ,
+    } ->
+	file { '/etc/nginx/sites-enabled/':
+        ensure => directory ,
+    } ->
 	file { 'default-nginx-disable':
 		path => '/etc/nginx/sites-enabled/default',
 		ensure => absent
@@ -94,6 +98,7 @@ class nginx {
 	file { 'vagrant-nginx-conf':
 		path => '/etc/nginx/nginx.conf',
 		ensure => present,
+        replace => true,
 		source => 'puppet:///modules/nginx/nginx.conf',
 	} ->
 	file { "/var/cache/ngx_pagespeed_cache":
@@ -103,11 +108,17 @@ class nginx {
 	file { 'vagrant-nginx-default-symfony2':
 		path => '/etc/nginx/default-symfony2',
 		ensure => present,
+        replace => true,
 		source => 'puppet:///modules/nginx/vhost/default-symfony2.vhost',
 	} ->
 	file { 'vagrant-nginx-default-symfony2-dev':
 		path => '/etc/nginx/default-symfony2-dev',
 		ensure => present,
+        replace => true,
 		source => 'puppet:///modules/nginx/vhost/default-symfony2-dev.vhost',
+	} ->
+	service { 'nginx start':
+	    name => "nginx",
+		ensure => running
 	}
 }

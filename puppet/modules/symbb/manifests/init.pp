@@ -8,31 +8,38 @@ class symbb {
 	$database_user = "root"
 	$database_password = "73wozGWmO1KgCBogtr8D"
 
-    file { '/var/www/symbb':
-        ensure  => 'link',
-        target  => '/vagrant/symbb',
+	file { '/var/www/symbb/':
+        ensure => absent ,
+        recurse => true,
+        purge => true,
+        force => true,
     } ->
-    file { 'vagrant-nginx':
+	exec { 'sudo git clone https://github.com/SymBB/symbb_sandbox.git /var/www/symbb/':
+		path => '/usr/bin',
+		cwd => '/var/www/'
+	} ->
+    file { 'vagrant-nginx-symbb':
         path => '/etc/nginx/sites-available/symbb',
         ensure => present,
+        replace => true,
         source => 'puppet:///modules/symbb/symbb.vhost',
     } ->
-    file { 'vagrant-nginx-enable':
-        path => '/etc/nginx/sites-enabled/symbb',
-        target => '/etc/nginx/sites-available/symbb',
-        ensure => link
+    file { '/etc/nginx/sites-enabled/symbb':
+        ensure  => 'link',
+        target  => '/etc/nginx/sites-available/symbb',
     } ->
-	exec { 'git clone git@github.com:SymBB/symbb_sandbox.git':
-		path => '/usr/bin',
-		cwd => '/var/www/symbb'
-	} ->
-	file { 'vagrant-symbb-paramerters':
+	file { 'vagrant-nginx-symbb-paramerters':
 		path => '/var/www/symbb/app/config/parameters.yml',
-		ensure => file,
+		ensure => present,
+        replace => true,
 		content => template('symbb/parameters.yml.erb'),
 	} ->
-	exec { 'ant':
+	exec { 'sudo ant':
 		path => '/usr/bin',
+		timeout => 600,
 		cwd => '/var/www/symbb/build/install/',
+	}
+	exec { 'sudo /etc/init.d/nginx reload':
+		path => '/usr/bin'
 	}
 }
