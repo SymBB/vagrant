@@ -1,0 +1,21 @@
+# vagrant/puppet/modules/nginx/files/symbb
+server {
+	listen   8080;
+        server_name symbb.local;
+        root /var/www/symbb/web;
+        index app.php;
+        location / {
+			try_files $uri /app.php?$args;
+        }
+        include default-symfony2;
+}
+server {
+        listen   8080;
+        server_name dev.symbb.local;
+        root /var/www/symbb/web;
+        index app_dev.php;
+        location / {
+			try_files $uri /app_dev.php?$args;
+        }
+        include default-symfony2-dev;
+}
