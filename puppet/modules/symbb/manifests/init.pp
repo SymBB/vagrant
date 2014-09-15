@@ -6,7 +6,8 @@ class symbb {
 
 	$database_name = "symbb"
 	$database_user = "root"
-	$database_password = "73wozGWmO1KgCBogtr8D"
+	$database_pw = "73wozGWmO1KgCBogtr8D"
+	$secret = "sdff342tvgdf3hb3f35s"
 
 	file { '/var/www/symbb/':
         ensure => absent ,
@@ -18,6 +19,10 @@ class symbb {
 		path => '/usr/bin',
 		cwd => '/var/www/'
 	} ->
+    file { '/vagrant/www/':
+        ensure  => 'link',
+        target  => '/var/www/',
+    } ->
     file { 'vagrant-nginx-symbb':
         path => '/etc/nginx/sites-available/symbb',
         ensure => present,
@@ -34,11 +39,11 @@ class symbb {
         replace => true,
 		content => template('symbb/parameters.yml.erb'),
 	} ->
-	exec { 'sudo ant':
-		path => '/usr/bin',
-		timeout => 600,
-		cwd => '/var/www/symbb/build/install/',
-	}
+	#exec { 'sudo ant':
+	#	path => '/usr/bin',
+	#	timeout => 600,
+	#	cwd => '/var/www/symbb/build/install/',
+	#}
 	exec { 'sudo /etc/init.d/nginx reload':
 		path => '/usr/bin'
 	}
