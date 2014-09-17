@@ -39,11 +39,11 @@ class symbb {
         replace => true,
 		content => template('symbb/parameters.yml.erb'),
 	} ->
-	#exec { 'sudo ant':
-	#	path => '/usr/bin',
-	#	timeout => 600,
-	#	cwd => '/var/www/symbb/build/install/',
-	#}
+	exec { 'sudo ant':
+		path => '/usr/bin',
+		timeout => 0,
+		cwd => '/var/www/symbb/build/install/',
+	}
 	exec { 'sudo /etc/init.d/nginx reload':
 		path => '/usr/bin'
 	}
