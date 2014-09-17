@@ -39,12 +39,18 @@ class symbb {
         replace => true,
 		content => template('symbb/parameters.yml.erb'),
 	} ->
+	file { '/var/www/symbb/app/logs/':
+        ensure => directory ,
+    } ->
+	file { '/var/www/symbb/app/cache/':
+        ensure => directory ,
+    } ->
 	exec { 'sudo ant':
 		path => '/usr/bin',
 		timeout => 0,
 		cwd => '/var/www/symbb/build/install/',
-	}
-	exec { 'sudo /etc/init.d/nginx reload':
+	} ->
+	exec { 'sudo /etc/init.d/nginx restart':
 		path => '/usr/bin'
 	}
 }

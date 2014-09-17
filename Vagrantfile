@@ -7,6 +7,7 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.box = "chef/debian-7.4"
     config.vm.network "forwarded_port", guest: 80, host: 5000
+    config.vm.network "forwarded_port", guest: 8080, host: 8080
     config.vm.network "private_network", ip: "192.168.33.33"
     config.ssh.forward_agent = true
     nfs_setting= RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/
