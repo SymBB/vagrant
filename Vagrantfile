@@ -5,13 +5,15 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    require 'rbconfig'
+    is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+
     config.vm.box = "chef/debian-7.4"
     config.vm.network "forwarded_port", guest: 80, host: 5000
     config.vm.network "forwarded_port", guest: 8080, host: 8080
     config.vm.network "private_network", ip: "192.168.33.33"
     config.ssh.forward_agent = true
-    nfs_setting= RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/
-    config.vm.synced_folder ".", "/vagrant", id: "symbb-vagrant-root", type: "nfs", nfs_udp: false, :nfs => nfs_setting
     config.vm.provision "shell", path: "init.sh"
     config.vm.provision "puppet" do |puppet|
         puppet.manifests_path = "puppet/manifests"
@@ -23,5 +25,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ["modifyvm", :id, "--memory", "1024"]
         vb.customize ["modifyvm", :id, "--cpus", "1"]
         vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    end
+    if is_windows
+        #config.vm.synced_folder ".", "/vagrant", type: "smb"
+        config.vm.synced_folder ".", "/vagrant"
+    else
+        nfs_setting= RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/
+        config.vm.synced_folder ".", "/vagrant", id: "symbb-vagrant-root", type: "nfs", nfs_udp: false, :nfs => nfs_setting
     end
 end

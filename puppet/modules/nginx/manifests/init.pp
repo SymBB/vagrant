@@ -2,10 +2,6 @@ class nginx {
 
     require php
     require mysql
-
-  ##################
-  ## Default nginx #
-  ##################
   
   ################################################################################################
   # Build nginx with pagespeed                                                                   #
@@ -25,12 +21,12 @@ class nginx {
 		cwd => '/home/install/'
 	} -> # and then:
 	file { 'remove old pagespeed folder':
-        path => '/home/install/ngx_pagespeed-release-1.8.31.4-beta/',
-        ensure => absent,
-        recurse => true,
-        purge => true,
-        force => true,
-    } ->
+    path => '/home/install/ngx_pagespeed-release-1.8.31.4-beta/',
+    ensure => absent,
+    recurse => true,
+    purge => true,
+    force => true,
+  } ->
 	exec { 'unzip release-1.8.31.4-beta.zip':
 		path => '/usr/bin',
 		cwd => '/home/install/'
@@ -40,15 +36,15 @@ class nginx {
 		cwd => '/home/install/ngx_pagespeed-release-1.8.31.4-beta/'
 	} -> # and then:
 	file { 'remove old psol pagespeed folder':
-        path => '/home/install/ngx_pagespeed-release-1.8.31.4-beta/psol',
-        ensure => absent,
-        recurse => true,
-        purge => true,
-        force => true,
-    } ->
+    path => '/home/install/ngx_pagespeed-release-1.8.31.4-beta/psol',
+    ensure => absent,
+    recurse => true,
+    purge => true,
+    force => true,
+  } ->
 	exec { 'tar -xzvf 1.8.31.4.tar.gz':
-	    command => 'tar -xzvf 1.8.31.4.tar.gz',
-		path => '/bin',
+    command => 'tar -xzvf 1.8.31.4.tar.gz',
+    path => '/bin',
 		cwd => '/home/install/ngx_pagespeed-release-1.8.31.4-beta/'
 	} -> # and then:
 	exec { 'wget http://nginx.org/download/nginx-1.7.3.tar.gz':
@@ -56,14 +52,14 @@ class nginx {
 		cwd => '/home/install/'
 	} -> # and then:
 	file { 'remove old nginx folder':
-        path => '/home/install/nginx-1.7.3/',
-        ensure => absent,
-        recurse => true,
-        purge => true,
-        force => true,
-    } ->
+    path => '/home/install/nginx-1.7.3/',
+    ensure => absent,
+    recurse => true,
+    purge => true,
+    force => true,
+  } ->
 	exec { 'tar -xvzf nginx-1.7.3.tar.gz':
-	    command => 'tar -xvzf nginx-1.7.3.tar.gz',
+    command => 'tar -xvzf nginx-1.7.3.tar.gz',
 		path => '/bin',
 		cwd => '/home/install/'
 	} -> # and then:
@@ -79,18 +75,18 @@ class nginx {
 		path => '/usr/bin',
 		cwd => '/home/install/nginx-1.7.3/'
 	} -> # and then:
-    file { 'vagrant-nginx-initscript':
-        path => '/etc/init.d/nginx',
-        ensure => present,
-        replace => true,
-        source => 'puppet:///modules/nginx/init.d/nginx',
-    } ->
+  file { 'vagrant-nginx-initscript':
+    path => '/etc/init.d/nginx',
+    ensure => present,
+    replace => true,
+    source => 'puppet:///modules/nginx/init.d/nginx',
+  } ->
 	file { '/etc/nginx/sites-available/':
-        ensure => directory ,
-    } ->
+    ensure => directory ,
+  } ->
 	file { '/etc/nginx/sites-enabled/':
-        ensure => directory ,
-    } ->
+    ensure => directory ,
+  } ->
 	file { 'default-nginx-disable':
 		path => '/etc/nginx/sites-enabled/default',
 		ensure => absent
@@ -98,7 +94,7 @@ class nginx {
 	file { 'vagrant-nginx-conf':
 		path => '/etc/nginx/nginx.conf',
 		ensure => present,
-        replace => true,
+    replace => true,
 		source => 'puppet:///modules/nginx/nginx.conf',
 	} ->
 	file { "/var/cache/ngx_pagespeed_cache":
@@ -108,17 +104,26 @@ class nginx {
 	file { 'vagrant-nginx-default-symfony2':
 		path => '/etc/nginx/default-symfony2',
 		ensure => present,
-        replace => true,
+    replace => true,
 		source => 'puppet:///modules/nginx/vhost/default-symfony2.vhost',
 	} ->
 	file { 'vagrant-nginx-default-symfony2-dev':
 		path => '/etc/nginx/default-symfony2-dev',
 		ensure => present,
-        replace => true,
+    replace => true,
 		source => 'puppet:///modules/nginx/vhost/default-symfony2-dev.vhost',
 	} ->
+  file { '/etc/nginx/sites-available/phpmyadmin':
+    ensure => present,
+    replace => true,
+    source => 'puppet:///modules/mysql/phpmyadmin.vhost',
+  } ->
+  file { '/etc/nginx/sites-enabled/phpmyadmin':
+    ensure  => 'link',
+    target  => '/etc/nginx/sites-available/phpmyadmin',
+  } ->
 	service { 'nginx start':
-	    name => "nginx",
+    name => "nginx",
 		ensure => running
 	}
 }

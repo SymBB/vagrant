@@ -16,9 +16,15 @@ Read the official Site https://www.vagrantup.com/
 3) go to the newly created repo directory
 4) run "vagrant up"
 5) link the url "symbb.local" and "dev.symbb.local" to the VM ( over you hosts file )
-5.1) symbb.local is the production env.
-5.2) dev.symbb.local is the dev. env.
+5.1) symbb.local:8080 is the production env. (port will skip varnish cache because currently not working)
+5.2) dev.symbb.local:8080 is the dev. env. (port will skip varnish cache because currently not working)
 6) enjoy! You have now a running VM with a installed Sandbox Version of Symbb
+
+## vhost example
+
+    192.168.33.33   symbb.local
+	192.168.33.33	dev.symbb.local
+	192.168.33.33	phpmyadmin.local
 
 ## Tip of the Day
 
