@@ -79,6 +79,9 @@ class nginx {
     path => '/etc/init.d/nginx',
     ensure => present,
     replace => true,
+    owner  => "root",
+    group => "root",
+    mode  => 0777,
     source => 'puppet:///modules/nginx/init.d/nginx',
   } ->
 	file { '/etc/nginx/sites-available/':
