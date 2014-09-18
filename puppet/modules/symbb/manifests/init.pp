@@ -42,9 +42,23 @@ class symbb {
 	} ->
 	file { '/var/www/symbb/app/logs/':
     ensure => directory ,
+    owner  => "www-data"
   } ->
 	file { '/var/www/symbb/app/cache/':
     ensure => directory ,
+    owner  => "www-data"
+  } ->
+  file { '/var/log/symbb':
+    ensure => directory,
+    owner  => "www-data"
+  } ->
+  file { '/var/log/symbb/access.log':
+    ensure => present,
+    owner  => "www-data"
+  } ->
+  file { '/var/log/symbb/error.log':
+    ensure => present,
+    owner  => "www-data"
   } ->
 	exec { 'sudo ant':
 		path => '/usr/bin',

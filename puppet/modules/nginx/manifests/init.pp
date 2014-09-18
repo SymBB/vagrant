@@ -116,11 +116,23 @@ class nginx {
   file { '/etc/nginx/sites-available/phpmyadmin':
     ensure => present,
     replace => true,
-    source => 'puppet:///modules/mysql/phpmyadmin.vhost',
+    source => 'puppet:///modules/nginx/vhost/phpmyadmin.vhost',
   } ->
   file { '/etc/nginx/sites-enabled/phpmyadmin':
     ensure  => 'link',
     target  => '/etc/nginx/sites-available/phpmyadmin',
+  } ->
+  file { '/var/log/phpmyadmin':
+    ensure => directory,
+    owner  => "www-data"
+  } ->
+  file { '/var/log/phpmyadmin/access.log':
+    ensure => present,
+    owner  => "www-data"
+  } ->
+  file { '/var/log/phpmyadmin/error.log':
+    ensure => present,
+    owner  => "www-data"
   } ->
 	service { 'nginx start':
     name => "nginx",

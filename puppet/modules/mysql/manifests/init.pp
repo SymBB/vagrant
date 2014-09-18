@@ -21,9 +21,11 @@ class mysql {
         command => "mysqladmin -uroot password 73wozGWmO1KgCBogtr8D",
 	} ->
   # clone phpmyadmin
-  file { '/var/www/phpmyadmin':
-    ensure => directory,
-    owner  => "www-data"
+  file { '/var/www/phpmyadmin/':
+    ensure => absent ,
+    recurse => true,
+    purge => true,
+    force => true,
   } ->
   exec { 'sudo git clone https://github.com/phpmyadmin/phpmyadmin.git /var/www/phpmyadmin/':
     path => '/usr/bin',

@@ -8,6 +8,8 @@ server {
 			try_files $uri /app.php?$args;
         }
         include default-symfony2;
+        access_log /var/log/symbb/access.log;
+        error_log /var/log/symbb/error.log;
 }
 server {
         listen   8080;
@@ -18,4 +20,6 @@ server {
 			try_files $uri /app_dev.php?$args;
         }
         include default-symfony2-dev;
+        access_log /var/log/symbb/access.log;
+        error_log /var/log/symbb/error.log;
 }
