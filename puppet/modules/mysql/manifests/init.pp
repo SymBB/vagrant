@@ -29,6 +29,7 @@ class mysql {
   } ->
   exec { 'sudo git clone https://github.com/phpmyadmin/phpmyadmin.git /var/www/phpmyadmin/':
     path => '/usr/bin',
+    timeout => 600,
     cwd => '/var/www/'
   }
 }
