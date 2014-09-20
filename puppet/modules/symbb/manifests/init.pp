@@ -20,10 +20,6 @@ class symbb {
 		path => '/usr/bin',
 		cwd => '/var/www/'
 	} ->
-  file { '/vagrant/www/':
-    ensure  => 'link',
-    target  => '/var/www/',
-  } ->
   file { 'vagrant-nginx-symbb':
     path => '/etc/nginx/sites-available/symbb',
     ensure => present,

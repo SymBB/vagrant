@@ -27,10 +27,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     end
     if is_windows
-        #config.vm.synced_folder ".", "/vagrant", type: "smb"
-        config.vm.synced_folder ".", "/vagrant"
+        config.vm.synced_folder "./shared", "/vagrant", type: "smb"
+        #config.vm.synced_folder "./shared", "/vagrant"
     else
         nfs_setting= RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/
-        config.vm.synced_folder ".", "/vagrant", id: "symbb-vagrant-root", type: "nfs", nfs_udp: false, :nfs => nfs_setting
+        config.vm.synced_folder "./shared", "/vagrant", id: "symbb-vagrant-root", type: "nfs", nfs_udp: false, :nfs => nfs_setting
     end
 end
