@@ -10,18 +10,16 @@ class symbb {
   $database_pw = "73wozGWmO1KgCBogtr8D"
   $secret = "sdff342tvgdf3hb3f35s"
 
-  exec { 'sudo git clone https://github.com/SymBB/symbb_sandbox.git /var/www/symbb/':
-    path => '/usr/bin',
-    cwd  => '/var/www/',
-    user => "www-data"
-  } ->
-  file { 'set owner of symbb dir':
+  file { '/var/www/symbb/':
     path    => '/var/www/symbb/',
-    ensure  => directory ,
-    owner   => "www-data",
+    ensure  => absent ,
     recurse => true,
     force   => true
   }  ->
+  exec { 'sudo git clone https://github.com/SymBB/symbb_sandbox.git /var/www/symbb/':
+    path => '/usr/bin',
+    cwd  => '/var/www/'
+  } ->
   file { 'vagrant-nginx-symbb':
     path    => '/etc/nginx/sites-available/symbb',
     ensure  => present,
@@ -39,16 +37,13 @@ class symbb {
     content => template('symbb/parameters.yml.erb'),
   } ->
   file { '/var/www/symbb/app/logs/':
-    ensure => directory ,
-    owner  => "www-data"
+    ensure => directory
   } ->
   file { '/var/www/symbb/app/cache/':
-    ensure => directory ,
-    owner  => "www-data"
+    ensure => directory
   } ->
   file { '/var/log/symbb':
-    ensure => directory,
-    owner  => "www-data"
+    ensure => directory
   } ->
   file { '/var/log/symbb/access.log':
     ensure => present,
